@@ -1,5 +1,6 @@
 import pickle
 import streamlit as st
+import lzma   # ✅ IMPORTANT
 
 def recommend(movie):
     if movie not in movies['title'].values:
@@ -23,8 +24,12 @@ def recommend(movie):
 
 st.title("🎬 Movie Recommender System")
 
+# ✅ Load normal pickle
 movies = pickle.load(open('model/movie_list.pkl', 'rb'))
-similarity = pickle.load(open('model/similarity.pkl', 'rb'))
+
+# ✅ FIX: Load compressed LZMA file properly
+with lzma.open('model/similarity_lzma.pkl', 'rb') as f:
+    similarity = pickle.load(f)
 
 movie_list = movies['title'].values
 
